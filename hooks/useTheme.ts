@@ -1,7 +1,8 @@
+import { useThemeStore } from '@/stores/theme.store';
+import { AppTheme, darkTheme, lightTheme } from '@/theme/themes';
 import { useMemo } from 'react';
 import { useColorScheme } from 'react-native';
-import { useThemeStore } from '../store/theme.store';
-import { AppTheme, darkTheme, lightTheme } from './themes';
+
 
 /**
  * Hook to access the current theme and resolved mode.

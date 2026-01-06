@@ -2,17 +2,20 @@ export const tokens = {
   colors: {
     // Base Palette
     white: '#FFFFFF',
+    whiteOpacity: '#ffffff2c',
     black: '#000000',
+    blackOpaciity: '#00000012',
+    
 
     // Grayscale
     gray50: '#F9FAFB',
     gray100: '#F3F4F6',
-    gray200: '#E5E7EB',
+    gray200: '#e5e7eb14',
     gray300: '#D1D5DB',
     gray400: '#9CA3AF',
     gray500: '#6B7280',
     gray600: '#4B5563',
-    gray700: '#374151',
+    gray700: '#0525583a',
     gray800: '#1F2937',
     gray900: '#111827',
 
@@ -23,10 +26,12 @@ export const tokens = {
     primary600: '#2563EB',
     primary700: '#1D4ED8',
     primary900: '#1E3A8A',
+    primary1000: '#0606dfff',
 
     // Semantic Status
     success: '#10B981',
     error: '#EF4444',
+    danger: '#ef444418',
     warning: '#F59E0B',
     info: '#3B82F6',
   },
@@ -52,6 +57,8 @@ export const tokens = {
       l: 20,
       xl: 24,
       xxl: 32,
+      xxxl: 48,
+      xxxxl: 64,
     },
     fontWeights: {
       regular: '400',
