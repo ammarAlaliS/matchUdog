@@ -1,7 +1,8 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import Toast from 'react-native-toast-message';
-import { useAuthStore } from '../stores/auth.store';
+import { API_CONFIG, getApiUrl } from '../config/api.config';
+import { AuthUser, useAuthStore } from '../stores/auth.store';
 
 export const useAuth = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,13 +12,11 @@ export const useAuth = () => {
   const login = async (values: { email: string; password: string }, { resetForm }: any) => {
     try {
       setIsLoading(true);
-      console.log('Starting login request...');
       
-      // Timeout controller
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout
+      const timeoutId = setTimeout(() => controller.abort(), API_CONFIG.TIMEOUT_MS);
       
-      const response = await fetch('https://obbaramarket-backend.onrender.com/api/ObbaraMarket/login', {
+      const response = await fetch(getApiUrl('LOGIN'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -32,39 +31,39 @@ export const useAuth = () => {
       clearTimeout(timeoutId);
       
       const rawText = await response.text();
-      console.log('Raw Response Status:', response.status);
-      console.log('Raw Response Body:', rawText);
       
-      // Try to parse as JSON
       let data;
       try {
         data = JSON.parse(rawText);
       } catch {
         throw new Error(rawText || `Error del servidor (${response.status})`);
       }
-      
-      console.log('Login Response:', data);
 
       if (!response.ok) {
         throw new Error(data.message || 'Credenciales incorrectas');
       }
 
+      const user: AuthUser = {
+        id: data.id,
+        email: values.email,
+        firstName: data.first_name,
+        lastName: data.last_name,
+        profileImgUrl: data.profile_img_url,
+        isActive: data.isActive,
+      };
       
-      const user = { id: data.id || data.user?.id, email: data.email || data.user?.email, name: data.name || data.user?.name };
-      const token = data.token || data.accessToken;
-      
-      setAuth(user, token);
+      setAuth(user, data.token);
 
       Toast.show({
         type: 'success',
         text1: 'Inicio de sesión exitoso',
+        text2: `Bienvenido, ${user.firstName}`,
       });
 
       resetForm();
       router.replace('/(tabs)');
 
     } catch (error: any) {
-      console.log('Login Error:', error.message);
       Toast.show({
         type: 'error',
         text1: 'Error',
@@ -75,7 +74,6 @@ export const useAuth = () => {
     }
   };
 
-
   const logout = () => {
     useAuthStore.getState().logout();
     router.replace('/(auth)/welcome');
@@ -83,4 +81,3 @@ export const useAuth = () => {
 
   return { login, logout, isLoading };
 };
-

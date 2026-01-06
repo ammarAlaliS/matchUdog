@@ -6,7 +6,6 @@ import { Formik } from 'formik';
 import { useMemo } from 'react';
 import { ActivityIndicator, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-
 export default function LoginForm() {
     const { login, isLoading } = useAuth();
     const { theme } = useTheme();
@@ -18,7 +17,7 @@ export default function LoginForm() {
             validationSchema={loginSchema}
             onSubmit={login}
         >
-            {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid }: any) => (
+            {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid }) => (
                 <View style={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -27,13 +26,15 @@ export default function LoginForm() {
                 }}>
                     {/* Email */}
                     <View style={styles.formik.input}>
-                        <Text style={[styles.typography.sub,]}>Email</Text>
+                        <Text style={styles.typography.sub}>Email</Text>
                         <TextInput
                             placeholder="Email"
                             placeholderTextColor={theme.colors.textSecondary}
                             onChangeText={handleChange('email')}
                             onBlur={handleBlur('email')}
                             value={values.email}
+                            keyboardType="email-address"
+                            autoCapitalize="none"
                             style={errors.email && touched.email ? styles.formik.inputError : styles.formik.username}
                         />
                     </View>
@@ -41,7 +42,7 @@ export default function LoginForm() {
 
                     {/* Password */}
                     <View style={styles.formik.input}>
-                        <Text style={[styles.typography.sub,]}>Contraseña</Text>
+                        <Text style={styles.typography.sub}>Contraseña</Text>
                         <TextInput
                             placeholder="Contraseña"
                             placeholderTextColor={theme.colors.textSecondary}
@@ -54,12 +55,9 @@ export default function LoginForm() {
                     </View>
                     {errors.password && touched.password && <Text style={styles.formik.error}>{errors.password}</Text>}
 
-                    {/* Botón */}
+                    {/* Button */}
                     <TouchableOpacity
-                        onPress={() => {
-                            console.log('Button pressed, isValid:', isValid, 'isLoading:', isLoading, 'values:', values, 'errors:', errors);
-                            handleSubmit();
-                        }}
+                        onPress={() => handleSubmit()}
                         disabled={isLoading}
                         style={[styles.components.btn, (!isValid || isLoading) && { opacity: 0.6 }]}
                     >
@@ -69,7 +67,6 @@ export default function LoginForm() {
                             <Text style={styles.components.btnTxt}>Iniciar Sesión</Text>
                         )}
                     </TouchableOpacity>
-
                 </View>
             )}
         </Formik>

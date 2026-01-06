@@ -12,7 +12,6 @@ export default function Index() {
 
   useEffect(() => {
     const unsubFinish = useAuthStore.persist.onFinishHydration(() => {
-      console.log('Index hydrated, token:', useAuthStore.getState().token);
       setIsHydrated(true);
     });
 
@@ -23,7 +22,6 @@ export default function Index() {
     return () => unsubFinish();
   }, []);
 
-  // Wait for hydration
   if (!isHydrated) {
     return (
       <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
@@ -32,7 +30,6 @@ export default function Index() {
     );
   }
 
-  // Redirect based on auth state
   if (token) {
     return <Redirect href="/(tabs)" />;
   }
