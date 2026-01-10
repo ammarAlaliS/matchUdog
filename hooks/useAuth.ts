@@ -1,9 +1,9 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import Toast from 'react-native-toast-message';
-import { API_CONFIG, getApiUrl } from '../config/api.config';
+import { Alert } from 'react-native'; // Cambia Toast por Alert
+import { apiFetch } from '../services/api.client';
 import { AuthUser, useAuthStore } from '../stores/auth.store';
-import { secureStorage } from '../utils/secure-storage';
+import { KEYS, secureStorage } from '../utils/secure-storage';
 
 export const useAuth = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,33 +14,25 @@ export const useAuth = () => {
     try {
       setIsLoading(true);
 
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), API_CONFIG.TIMEOUT_MS);
-
-      const response = await fetch(getApiUrl('LOGIN'), {
+      // Use the centralized API client for consistent behaviour
+      const res = await apiFetch('LOGIN', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+        body: {
           email: values.email,
           password: values.password,
-        }),
-        signal: controller.signal,
+        },
       });
 
-      clearTimeout(timeoutId);
+      const data = await (async () => {
+        try {
+          return await res.json();
+        } catch {
+          const txt = await res.text();
+          throw new Error(txt || `Error del servidor (${res.status})`);
+        }
+      })();
 
-      const rawText = await response.text();
-
-      let data;
-      try {
-        data = JSON.parse(rawText);
-      } catch {
-        throw new Error(rawText || `Error del servidor (${response.status})`);
-      }
-
-      if (!response.ok) {
+      if (!res.ok) {
         throw new Error(data.message || 'Credenciales incorrectas');
       }
 
@@ -54,22 +46,26 @@ export const useAuth = () => {
       };
 
       setAuth(user, data.token);
-
-      // Handle Remember Me
+      // Handle Remember Me (non-sensitive)
       if (remember) {
-        await secureStorage.setItem('remembered-email', values.email);
+        await secureStorage.setItem(KEYS.REMEMBERED_EMAIL, values.email);
       } else {
-        await secureStorage.removeItem('remembered-email');
+        await secureStorage.removeItem(KEYS.REMEMBERED_EMAIL);
+      }
+
+      // Persist refresh token securely if provided by backend
+      if (data.refresh_token) {
+        await secureStorage.setItem(KEYS.REFRESH_TOKEN, data.refresh_token);
       }
 
       resetForm();
       router.replace('/(tabs)');
 
     } catch (error: any) {
-      Toast.show({
-        type: 'error',
-        text1: error.name === 'AbortError' ? 'Tiempo de espera agotado' : error.message,
-      });
+      Alert.alert(
+        error.name === 'AbortError' ? 'Tiempo de espera agotado' : 'Error',
+        error.message
+      );
     } finally {
       setIsLoading(false);
     }
@@ -77,11 +73,13 @@ export const useAuth = () => {
 
   const logout = () => {
     useAuthStore.getState().logout();
+    // Clear refresh token
+    Promise.resolve(secureStorage.removeItem(KEYS.REFRESH_TOKEN)).catch(() => {});
     router.replace('/(auth)/welcome');
   };
 
   const getRememberedEmail = async () => {
-    return await secureStorage.getItem('remembered-email');
+    return await secureStorage.getItem(KEYS.REMEMBERED_EMAIL);
   };
 
   return { login, logout, getRememberedEmail, isLoading };

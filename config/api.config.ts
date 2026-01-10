@@ -9,6 +9,7 @@ export const API_CONFIG = {
   
   ENDPOINTS: {
     LOGIN: '/login',
+    REFRESH: '/refresh-token',
     // Add more endpoints as needed
   },
 } as const;

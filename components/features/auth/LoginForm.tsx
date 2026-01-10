@@ -1,4 +1,5 @@
 import { AntigravityBackground } from '@/components/ui/AntigravityBackground';
+import FormError from '@/components/ui/FormError';
 import { useAuth } from '@/hooks/useAuth';
 import { useTheme } from '@/hooks/useTheme';
 import { createAppStyles } from '@/theme/styles';
@@ -53,7 +54,7 @@ export default function LoginForm() {
                                 autoCapitalize="none"
                                 style={errors.email && touched.email ? styles.formik.inputError : styles.formik.username}
                             />
-                            {errors.email && touched.email && <Text style={styles.formik.error}>{errors.email}</Text>}
+                            <FormError message={errors.email || ''} visible={errors.email && touched.email} />
                         </View>
 
                         {/* Password */}
@@ -68,8 +69,9 @@ export default function LoginForm() {
                                 value={values.password}
                                 style={errors.password && touched.password ? styles.formik.inputError : styles.formik.username}
                             />
-                            {errors.password && touched.password && <Text style={styles.formik.error}>{errors.password}</Text>}
+                            <FormError message={errors.password || ''} visible={errors.password && touched.password} />
                         </View>
+
 
 
                         <View style={[{
@@ -94,6 +96,7 @@ export default function LoginForm() {
                                         backgroundColor: theme.colors.whiteOpacity,
                                         width: theme.spacing.l,
                                         height: theme.spacing.l,
+
                                     }}
                                 />
                                 <Text style={styles.typography.h5}>Recordarme</Text>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
+  <style>
+    .box { fill: #f7f9fc; stroke: #2b6cb0; stroke-width:2; rx:8; }
+    .small { font: 14px/1.2 "Arial",sans-serif; fill:#0b2545 }
+    .title { font: 16px/1.2 "Arial",sans-serif; fill:#06264a; font-weight:700 }
+    .arrow { stroke:#2b6cb0; stroke-width:2; marker-end:url(#arrow); fill:none }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2b6cb0" />
+    </marker>
+  </defs>
+
+  <!-- User / UI -->
+  <rect x="40" y="40" width="260" height="100" class="box"/>
+  <text x="60" y="70" class="title">Usuario / Cliente</text>
+  <text x="60" y="95" class="small">LoginForm → `hooks/useAuth.login`</text>
+
+  <!-- App / Client -->
+  <rect x="380" y="30" width="330" height="140" class="box"/>
+  <text x="400" y="60" class="title">App / Cliente</text>
+  <text x="400" y="85" class="small">`services/api.client.ts` (apiFetch)</text>
+  <text x="400" y="105" class="small">Adjunta Authorization cuando hay token</text>
+
+  <!-- Backend -->
+  <rect x="760" y="30" width="360" height="140" class="box"/>
+  <text x="780" y="60" class="title">Backend API</text>
+  <text x="780" y="90" class="small">/login → devuelve { token, refresh_token, user }</text>
+  <text x="780" y="110" class="small">/refresh-token → rota token</text>
+
+  <!-- Arrows: Login request -->
+  <path d="M300 90 L380 90" class="arrow"/>
+  <text x="340" y="80" class="small">POST /login</text>
+  <path d="M710 90 L760 90" class="arrow"/>
+  <text x="730" y="80" class="small">apiFetch → Backend</text>
+
+  <!-- Response from backend -->
+  <path d="M1120 120 L760 120" class="arrow"/>
+  <text x="880" y="135" class="small">200 { token, refresh_token, user }</text>
+
+  <!-- Store tokens -->
+  <rect x="380" y="220" width="330" height="160" class="box"/>
+  <text x="400" y="250" class="title">Almacenamiento</text>
+  <text x="400" y="275" class="small">`stores/auth.store.ts` → setAuth(user, token)</text>
+  <text x="400" y="295" class="small">`utils/secure-storage.ts` → refresh_token (SecureStore en nativo)</text>
+  <text x="400" y="315" class="small">recordar-email → `localStorage` (solo UX)</text>
+
+  <path d="M760 140 L560 220" class="arrow"/>
+  <text x="640" y="180" class="small">token, refresh_token</text>
+
+  <!-- Protected routes check -->
+  <rect x="40" y="320" width="260" height="120" class="box"/>
+  <text x="60" y="345" class="title">Rutas Protegidas</text>
+  <text x="60" y="370" class="small">`components/features/auth/ProtectedRoute.tsx`</text>
+  <text x="60" y="390" class="small">Comprueba `isTokenValid()` (jwtUtils)</text>
+
+  <path d="M380 280 L300 320" class="arrow"/>
+  <text x="330" y="300" class="small">store.token → ProtectedRoute</text>
+
+  <!-- API calls with token and refresh logic -->
+  <rect x="380" y="420" width="330" height="160" class="box"/>
+  <text x="400" y="450" class="title">Llamadas API</text>
+  <text x="400" y="475" class="small">`services/api.client.ts` attaches Authorization</text>
+  <text x="400" y="495" class="small">Si 401 → `tryRefreshToken()` → POST /refresh-token</text>
+
+  <path d="M560 360 L560 420" class="arrow"/>
+  <text x="570" y="390" class="small">API requests</text>
+
+  <path d="M710 500 L760 500" class="arrow"/>
+  <text x="730" y="490" class="small">Si 401: /refresh-token</text>
+
+  <!-- Logout flow -->
+  <rect x="40" y="560" width="260" height="100" class="box"/>
+  <text x="60" y="590" class="title">Logout / Session Expirada</text>
+  <text x="60" y="610" class="small">`stores/auth.store.ts`.logout()</text>
+
+  <path d="M560 560 L300 560" class="arrow"/>
+  <text x="430" y="540" class="small">Si refresh falla → logout</text>
+
+  <!-- Footer notes -->
+  <text x="40" y="800" class="small">Notas: en web los tokens NO se persisten (in-memory), refresh_token se guarda en SecureStore nativo. Remember-email es UX-only.</text>
+
+</svg>

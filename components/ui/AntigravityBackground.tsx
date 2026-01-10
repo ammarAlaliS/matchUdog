@@ -95,7 +95,7 @@ const AnimatedBlob = ({ color, delay = 0, size = width * 1.5 }: { color: string;
                     height: size,
                     borderRadius: size / 2,
                     backgroundColor: color,
-                    opacity: 0.6,
+                    opacity: 0.6, // <-- Esto hace que los blobs sean semitransparentes
                 },
                 style,
             ]}
@@ -106,9 +106,9 @@ const AnimatedBlob = ({ color, delay = 0, size = width * 1.5 }: { color: string;
 export const AntigravityBackground = ({
     colors,
     secondaryColors = ["rgba(255,255,255,0.4)", "rgba(12, 10, 10, 0)"] as const,
-    blurIntensity = 60,
+    blurIntensity = 100,
     containerWidth = width,
-    containerHeight = height,
+    containerHeight = height,   
 }: AntigravityBackgroundProps) => {
 
     const blobColors = colors.slice(0, 5);
@@ -141,7 +141,14 @@ export const AntigravityBackground = ({
             </View>
 
             {/* Blur Layer - Merges the blobs */}
-            <BlurView intensity={blurIntensity} style={StyleSheet.absoluteFill} tint="default" />
+            <BlurView
+                intensity={60}
+                tint={'default'}
+                style={[
+                    styles.container,
+                    { backgroundColor: 'transparent' }, // Cambia aquí
+                ]}
+            />
         </View>
     );
 };

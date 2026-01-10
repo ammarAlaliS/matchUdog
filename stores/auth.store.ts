@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { jwtUtils, secureStorage } from '../utils/secure-storage';
@@ -34,6 +35,16 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'auth-secure-storage',
+      // On web we avoid persisting tokens (risk of XSS). Persist only non-sensitive data.
+      partialize: (state) => {
+        if (Platform.OS === 'web') {
+          // Persist user info but drop token on web
+          const { user } = state;
+          return { user } as Partial<AuthState>;
+        }
+        // On native, persist user + token
+        return { user: state.user, token: state.token } as Partial<AuthState>;
+      },
       storage: createJSONStorage(() => secureStorage),
     }
   )

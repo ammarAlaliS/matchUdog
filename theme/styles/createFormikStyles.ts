@@ -56,14 +56,25 @@ export const createFormikStyles = (theme: AppTheme) => StyleSheet.create({
     buttom: {
         color: '#FFF'
     },
-    error: {
-        color: 'red',
-        fontSize: 12,
+    errorContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
         position: 'absolute',
-        top: -10,
-        right: theme.spacing.s,
-        backgroundColor: theme.colors.background,
-        padding: theme.spacing.s,
-        borderRadius: theme.borderRadius.m,
+        top: -4,
+        right: theme.spacing.m,
+        backgroundColor: theme.colors.whiteOpacity,
+        paddingHorizontal: theme.spacing.s,
+        paddingVertical: 3,
+        borderRadius: theme.borderRadius.full,
+        borderWidth: 1,
+        borderColor: theme.colors.error,
+        gap: 4,
+        zIndex: 10,
+    },
+    errorText: {
+        color: theme.colors.text,
+        fontSize: 12,
+        fontWeight: '400',
     }
+
 });
