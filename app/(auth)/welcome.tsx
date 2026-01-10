@@ -1,5 +1,6 @@
 import { AntigravityBackground } from '@/components/ui/AntigravityBackground';
 import { useFontsLoader } from '@/utils/useFontsLoader';
+import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import React, { useMemo } from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
@@ -24,7 +25,7 @@ export default function WelcomeScreen() {
         colors={
           theme.dark
             ? ["#0606dfff", "#040427", "#040415ff", "#0606dfff", "#101064"]
-            : ["#038affff", "#E6F3FF", "#5eaffcff", "#C2E0FF", "#B3D9FF"]
+            : ["#51a0e6ff", "#E6F3FF", "#D6EBFF", "#C2E0FF", "#B3D9FF"]
         }
         blurIntensity={100}
         shapeColor={theme.colors.background}
@@ -97,7 +98,10 @@ export default function WelcomeScreen() {
               alignItems: 'center',
 
             }]}
-            onPress={() => router.push('/(auth)/login')}
+            onPress={() => {
+              Haptics.selectionAsync();
+              router.push('/(auth)/login');
+            }}
           >
             <AntigravityBackground
               colors={
