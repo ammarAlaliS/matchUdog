@@ -8,7 +8,6 @@ interface ThemeState {
 }
 
 export const useThemeStore = create<ThemeState>((set) => ({
-  // Default to system to respect user preference by default
   mode: 'system', 
   setMode: (mode) => set({ mode }),
 }));

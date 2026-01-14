@@ -19,7 +19,6 @@ export default function SetupProfileScreen() {
   const [age, setAge] = useState('');
 
   const handleContinue = () => {
-    // TODO: Save profile data
     router.replace('/(tabs)');
   };
 
@@ -43,7 +42,7 @@ export default function SetupProfileScreen() {
             </View>
 
             <View style={styles.components.card}>
-              {/* Name Input */}
+         
               <View style={{ marginBottom: theme.spacing.l }}>
                 <Text style={[styles.typography.label, { marginBottom: theme.spacing.xs }]}>Name</Text>
                 <TextInput
@@ -55,7 +54,6 @@ export default function SetupProfileScreen() {
                 />
               </View>
 
-              {/* Gender Selection */}
               <View style={{ marginBottom: theme.spacing.l }}>
                 <Text style={[styles.typography.label, { marginBottom: theme.spacing.xs }]}>Gender</Text>
                 <View style={{ flexDirection: 'row', gap: theme.spacing.m }}>
@@ -85,7 +83,7 @@ export default function SetupProfileScreen() {
                 </View>
               </View>
 
-              {/* Breed Input */}
+             
               <View style={{ marginBottom: theme.spacing.l }}>
                 <Text style={[styles.typography.label, { marginBottom: theme.spacing.xs }]}>Breed (Optional)</Text>
                 <TextInput
@@ -97,7 +95,7 @@ export default function SetupProfileScreen() {
                 />
               </View>
 
-              {/* Age Input */}
+           
               <View style={{ marginBottom: theme.spacing.xl }}>
                 <Text style={[styles.typography.label, { marginBottom: theme.spacing.xs }]}>Age (Optional)</Text>
                 <TextInput

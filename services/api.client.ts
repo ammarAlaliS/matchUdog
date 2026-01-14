@@ -35,7 +35,6 @@ async function tryRefreshToken(): Promise<string | null> {
 
         const data = await res.json();
         if (data?.token) {
-            // Update store
             const user = useAuthStore.getState().user ?? null;
             useAuthStore.getState().setAuth(user as any, data.token);
         }
@@ -72,18 +71,13 @@ export async function apiFetch(endpoint: keyof typeof API_CONFIG.ENDPOINTS | str
     let res = await timeoutFetch(url, init);
 
     if (res.status === 401) {
-        // Try refresh flow once
         const newToken = await tryRefreshToken();
         if (newToken) {
-            // Retry original request with new token
             const retryHeaders = { ...(init.headers as Record<string, string>), Authorization: `Bearer ${newToken}` };
             const retryInit = { ...init, headers: retryHeaders };
             res = await timeoutFetch(url, retryInit);
         } else {
-            // Emit event so UI can react (show modal, notify, etc.)
             emitAuthExpired();
-
-            // Logout and propagate (store cleared; navigation left to UI listeners)
             useAuthStore.getState().logout();
         }
     }

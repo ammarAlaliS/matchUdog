@@ -18,7 +18,7 @@ const BlurContainer = ({ children, style }: BlurContainerProps) => {
                 borderRadius: theme.spacing.m,
                 width: '100%',
             },
-            style // Apply external style here too for positioning if needed
+            style 
         ]}>
             <BlurView
                 intensity={60}
@@ -26,7 +26,7 @@ const BlurContainer = ({ children, style }: BlurContainerProps) => {
                 style={[
                     styles.content,
                     { backgroundColor: theme.colors.whiteOpacity },
-                    style // Merge style here so flexDirection etc. works on children
+                    style
                 ]}
             >
                 {children}

@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Alert } from 'react-native'; // Cambia Toast por Alert
+import { Alert } from 'react-native';
 import { apiFetch } from '../services/api.client';
 import { AuthUser, useAuthStore } from '../stores/auth.store';
 import { KEYS, secureStorage } from '../utils/secure-storage';
@@ -14,7 +14,6 @@ export const useAuth = () => {
     try {
       setIsLoading(true);
 
-      // Use the centralized API client for consistent behaviour
       const res = await apiFetch('LOGIN', {
         method: 'POST',
         body: {
@@ -46,14 +45,12 @@ export const useAuth = () => {
       };
 
       setAuth(user, data.token);
-      // Handle Remember Me (non-sensitive)
       if (remember) {
         await secureStorage.setItem(KEYS.REMEMBERED_EMAIL, values.email);
       } else {
         await secureStorage.removeItem(KEYS.REMEMBERED_EMAIL);
       }
 
-      // Persist refresh token securely if provided by backend
       if (data.refresh_token) {
         await secureStorage.setItem(KEYS.REFRESH_TOKEN, data.refresh_token);
       }
@@ -73,7 +70,6 @@ export const useAuth = () => {
 
   const logout = () => {
     useAuthStore.getState().logout();
-    // Clear refresh token
     Promise.resolve(secureStorage.removeItem(KEYS.REFRESH_TOKEN)).catch(() => {});
     router.replace('/(auth)/welcome');
   };

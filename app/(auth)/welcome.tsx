@@ -1,127 +1,155 @@
-import { AntigravityBackground } from '@/components/ui/AntigravityBackground';
-import { useFontsLoader } from '@/utils/useFontsLoader';
-import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
-import React, { useMemo } from 'react';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
-import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
+import React from 'react';
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  View
+} from 'react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
+
+import { BottomSheetSlideUp } from '@/components/animatedComponents/BottomSheetSlideUp';
+import ButtonWelcome from '@/components/features/auth/ButtonWelcome';
+import { AntigravityBackground } from '@/components/ui/AntigravityBackground';
 import { useTheme } from '../../hooks/useTheme';
-import { createAppStyles } from '../../theme/styles';
+import { useFontsLoader } from '../../utils/useFontsLoader';
+
+const { height, width } = Dimensions.get('window');
 
 export default function WelcomeScreen() {
   const router = useRouter();
   const { theme } = useTheme();
-  const styles = useMemo(() => createAppStyles(theme), [theme]);
 
   const fontsLoaded = useFontsLoader();
+  if (!fontsLoaded) return null;
 
-  if (!fontsLoaded) {
-    return null;
-  }
+  const topHeight = height * 0.45; 
 
   return (
-    <View style={styles.layout.container}>
+    <View style={[styles.container, { backgroundColor: theme.colors.primary }]}>
+
       <AntigravityBackground
         colors={
           theme.dark
             ? ["#0606dfff", "#040427", "#040415ff", "#0606dfff", "#101064"]
-            : ["#51a0e6ff", "#E6F3FF", "#D6EBFF", "#C2E0FF", "#B3D9FF"]
+            : ["#0606dfff", "#040427", "#040415ff", "#0606dfff", "#101064"]
         }
         blurIntensity={100}
         shapeColor={theme.colors.background}
       />
+      <Animated.View
+        entering={FadeInDown.duration(1500).springify()}
+        style={[styles.top, { height: topHeight }]}
+      >
+        <Image
+          source={require('../../assets/images/welcome-logo.png')}
+          style={styles.image}
+        />
+      </Animated.View>
 
-      <View style={[styles.layout.flex, { paddingHorizontal: theme.spacing.xl, justifyContent: 'center' }]}>
+      <BottomSheetSlideUp styles={styles} theme={theme}>
+        <Text style={styles.title}>Bienvenido a MatchDoggy</Text>
+          
+        <Text style={styles.subtitle}>
+          Encontrar el compañero perfecto para tu amigo peludo nunca ha sido tan fácil.
+        </Text>
 
-        {/* Top Section - Logo */}
-        <Animated.View
-          entering={FadeInDown.delay(200).duration(1000).springify()}
-          style={{ alignItems: 'center' }}
-        >
-          <Image
-            source={require('../../assets/images/welcome-logo.png')}
-            style={{
-              width: 250,
-              height: 250,
-              resizeMode: 'contain',
-              marginBottom: theme.spacing.m,
-            }}
-          />
-        </Animated.View>
-
-        {/* Middle Section - Text */}
-        <Animated.View
-          entering={FadeInDown.delay(400).duration(1000).springify()}
-          style={{ alignItems: 'center', marginBottom: 40 }}
-        >
-          <Text style={[styles.typography.h1, {
-            textAlign: 'center',
-            fontFamily: 'ShadowsIntoLight_400Regular',
-            fontSize: 70,
-            color: theme.colors.text,
-            lineHeight: 80,
-          }]}>
-            Doggy
+        <View style={styles.step}>
+          <View style={styles.circle} />
+          <Text style={styles.stepText}>
+            Crea un perfil para tu perro con fotos y detalles únicos.
           </Text>
-          <Text style={[styles.typography.subLg, {
-            textAlign: 'center',
-            opacity: 0.9,
-            color: theme.colors.text,
-            marginTop: 10,
-            fontWeight: '600'
-          }]}>
-            Tu comunidad canina favorita
+        </View>
+
+        <View style={styles.step}>
+          <View style={styles.circle} />
+          <Text style={styles.stepText}>
+            Explora perfiles de otros perros en tu área.
           </Text>
-        </Animated.View>
+        </View>
 
-        {/* Bottom Section - Action */}
-        <Animated.View
-          entering={FadeInUp.delay(600).duration(1000).springify()}
-          style={{ width: '100%', alignItems: 'center' }}
-        >
-          <TouchableOpacity
-            activeOpacity={0.8}
-            style={[styles.components.btn, {
-              paddingHorizontal: 40,
-              minWidth: 240,
-              backgroundColor: theme.colors.whiteOpacity,
-              borderRadius: 30,
-              height: 60,
-              justifyContent: 'center',
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.3,
-              shadowRadius: 10,
-              elevation: 8,
-              overflow: 'hidden',
-              position: 'relative',
-              alignItems: 'center',
+        <View style={styles.step}>
+          <View style={styles.circle} />
+          <Text style={styles.stepText}>
+            Conecta y organiza citas de juego seguras y divertidas.
+          </Text>
+        </View>
 
-            }]}
-            onPress={() => {
-              Haptics.selectionAsync();
-              router.push('/(auth)/login');
-            }}
-          >
-            <AntigravityBackground
-              colors={
-                theme.dark
-                  ? ["#000000ff", "#20010887", "#040415ff", "#4343f403", "#040415ff"]
-                  : ["#0d0d0dff", "#010120ff", "#040415ff", "#010120ff", "#040415ff"]
-              }
-              blurIntensity={40}
-              containerWidth={340}
-              containerHeight={56}
-            />
-            <Text style={[styles.components.btnTxt, { fontSize: 18, fontWeight: '700' }]}>
-              Empezar ahora
-            </Text>
-          </TouchableOpacity>
-        </Animated.View>
-
-      </View>
-
-
+        <ButtonWelcome />
+      </BottomSheetSlideUp>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+
+  top: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  image: {
+    width: 260,
+    height: 260,
+    resizeMode: 'contain',
+  },
+
+  whiteContainer: {
+    flex: 1,
+    paddingTop: 60, 
+    paddingHorizontal: 24,
+    paddingBottom: 32,
+  },
+
+  title: {
+    fontSize: 28,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginBottom: 8,
+    color: '#111827',
+  },
+
+  subtitle: {
+    fontSize: 18,
+    color: '#6B7280',
+    textAlign: 'center',
+    marginBottom: 24,
+  },
+
+  step: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+
+  circle: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#E6F4F1',
+    marginRight: 12,
+  },
+
+  stepText: {
+    flex: 1,
+    fontSize: 14,
+    color: '#374151',
+  },
+
+  button: {
+    marginTop: 24,
+    paddingVertical: 16,
+    borderRadius: 14,
+    alignItems: 'center',
+  },
+
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+});

@@ -4,15 +4,6 @@ import { useMemo } from 'react';
 import { useColorScheme } from 'react-native';
 
 
-/**
- * Hook to access the current theme and resolved mode.
- * 
- * Logic:
- * 1. Get `mode` from Zustand store (light | dark | system)
- * 2. Get system scheme from `useColorScheme` (light | dark | null)
- * 3. Resolve final mode: if store is 'system', fallback to system scheme (defaulting to light if null)
- * 4. Return resolved mode and corresponding theme object
- */
 export const useTheme = () => {
   const { mode: storeMode, setMode } = useThemeStore();
   const systemScheme = useColorScheme();
@@ -29,10 +20,10 @@ export const useTheme = () => {
   }, [resolvedMode]);
 
   return {
-    mode: resolvedMode, // The actual active visual mode
-    storeMode,          // The setting value (e.g. 'system')
-    setMode,            // Function to change mode
-    theme,              // The full theme object
+    mode: resolvedMode, 
+    storeMode,          
+    setMode,            
+    theme,   
     isDark: resolvedMode === 'dark',
   };
 };

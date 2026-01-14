@@ -11,7 +11,6 @@ export default function HomeScreen() {
     <View style={styles.layout.container}>
       <Text style={styles.typography.h2}>MatchUdog</Text>
       <Text style={styles.typography.sub}>Start Swiping!</Text>
-      {/* Placeholder for Swipe Card Deck */}
       <View style={{ height: 300, width: '100%', backgroundColor: theme.colors.card, borderRadius: theme.borderRadius.l, justifyContent: 'center', alignItems: 'center' }}>
         <Text style={styles.typography.body}>Dog Card Placeholder</Text>
       </View>

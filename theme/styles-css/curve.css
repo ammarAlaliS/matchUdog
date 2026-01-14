@@ -1,0 +1,12 @@
+/* styles.css */
+.top-curve {
+  width: 100%;
+  height: 120px;
+  background-color: white;
+  border-top-left-radius: 120px;
+  border-top-right-radius: 120px;
+  padding-top: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

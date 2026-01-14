@@ -17,7 +17,7 @@ export const tokens = {
     gray600: '#4B5563',
     gray700: '#0525583a',
     gray800: '#1F2937',
-    gray900: '#111827',
+    gray900: '#00040eff',
 
     // Primary Brand
     primary50: '#EFF6FF',

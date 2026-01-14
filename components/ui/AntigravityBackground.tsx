@@ -18,13 +18,12 @@ type AntigravityBackgroundProps = {
     colors: readonly [string, string, ...string[]];
     secondaryColors?: readonly [string, string, ...string[]];
     blurIntensity?: number;
-    shapeColor?: string; // Unused now, but kept for props compatibility
-    heightRatio?: number; // Unused
+    shapeColor?: string; 
+    heightRatio?: number;
     containerWidth?: number;
     containerHeight?: number;
 };
 
-// Internal Blob Component
 const AnimatedBlob = ({ color, delay = 0, size = width * 1.5 }: { color: string; delay?: number, size?: number }) => {
     const translateX = useSharedValue(0);
     const translateY = useSharedValue(0);
@@ -105,8 +104,6 @@ const AnimatedBlob = ({ color, delay = 0, size = width * 1.5 }: { color: string;
 
 export const AntigravityBackground = ({
     colors,
-    secondaryColors = ["rgba(255,255,255,0.4)", "rgba(12, 10, 10, 0)"] as const,
-    blurIntensity = 100,
     containerWidth = width,
     containerHeight = height,   
 }: AntigravityBackgroundProps) => {
@@ -115,23 +112,18 @@ export const AntigravityBackground = ({
 
     return (
         <View style={styles.container}>
-            {/* Base Background - Solid Fill to prevent white gaps */}
             <View style={StyleSheet.absoluteFill}>
                 <LinearGradient
-                    colors={colors} // Use the main vibrant colors for the base
+                    colors={colors} 
                     style={StyleSheet.absoluteFill}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
                 />
             </View>
-
-            {/* Floating Blobs Container */}
             <View style={[StyleSheet.absoluteFill, { alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }]}>
                 {blobColors.map((color, index) => {
-                    // Spread across full screen
                     const topPos = Math.random() * containerHeight * 0.8 - (containerHeight * 0.2);
                     const leftPos = Math.random() * containerWidth * 0.8 - (containerWidth * 0.2);
-
                     return (
                         <View key={index} style={{ position: 'absolute', top: topPos, left: leftPos }}>
                             <AnimatedBlob color={color} delay={index * 1000} size={containerWidth * 1.5} />
@@ -140,13 +132,12 @@ export const AntigravityBackground = ({
                 })}
             </View>
 
-            {/* Blur Layer - Merges the blobs */}
             <BlurView
                 intensity={60}
                 tint={'default'}
                 style={[
                     styles.container,
-                    { backgroundColor: 'transparent' }, // Cambia aquí
+                    { backgroundColor: 'transparent' }, 
                 ]}
             />
         </View>

@@ -27,11 +27,8 @@ export const ProtectedRoute = ({ children }: PropsWithChildren) => {
 
     useEffect(() => {
         if (!isHydrated) return;
-
-        // Check if token exists and is still valid
         if (!token || !isTokenValid()) {
             if (token) {
-                // Token expired, clean up
                 logout();
             }
             router.replace('/(auth)/welcome');

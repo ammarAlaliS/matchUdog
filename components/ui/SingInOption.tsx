@@ -11,7 +11,6 @@ const SingInOption = () => {
         <View
             style={{
                 flexDirection: 'row',
-                marginVertical: theme.spacing.xl,
                 paddingHorizontal: theme.spacing.m,
                 marginTop: 40,
             }}

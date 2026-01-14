@@ -22,7 +22,6 @@ export default function LoginForm() {
             onSubmit={(values, formikHelpers) => login(values, formikHelpers, remember)}
         >
             {({ handleChange, handleBlur, handleSubmit, setFieldValue, values, errors, touched, isValid }) => {
-                // Pre-fill email on mount
                 useMemo(() => {
                     const loadRememberedEmail = async () => {
                         const email = await getRememberedEmail();
@@ -41,7 +40,6 @@ export default function LoginForm() {
                         width: '100%',
                         marginTop: theme.spacing.xl
                     }}>
-                        {/* Email */}
                         <View style={styles.formik.input}>
                             <Text style={styles.typography.h5}>Email</Text>
                             <TextInput
@@ -57,7 +55,6 @@ export default function LoginForm() {
                             <FormError message={errors.email || ''} visible={errors.email && touched.email} />
                         </View>
 
-                        {/* Password */}
                         <View style={[styles.formik.input, { marginTop: theme.spacing.s }]}>
                             <Text style={styles.typography.h5}>Contraseña</Text>
                             <TextInput
@@ -71,8 +68,6 @@ export default function LoginForm() {
                             />
                             <FormError message={errors.password || ''} visible={errors.password && touched.password} />
                         </View>
-
-
 
                         <View style={[{
                             display: 'flex',
@@ -110,7 +105,7 @@ export default function LoginForm() {
                             marginTop: theme.spacing.xxl
 
                         }}>
-                            {/* Button */}
+                           
                             <TouchableOpacity
                                 onPress={() => handleSubmit()}
                                 disabled={isLoading}
@@ -129,8 +124,8 @@ export default function LoginForm() {
                                 <AntigravityBackground
                                     colors={
                                         theme.dark
-                                            ? ["#0d0d0dff", "#20010887", "#040415ff", "#4343f403", "#040415ff"]
-                                            : ["#0d0d0dff", "#010120ff", "#040415ff", "#010120ff", "#040415ff"]
+                                            ? ["#0606dfff", "#0606dfff"]
+                                            : ["#0606dfff", "#0606dfff"]
                                     }
                                     blurIntensity={40}
                                     containerWidth={Dimensions.get('window').width}
